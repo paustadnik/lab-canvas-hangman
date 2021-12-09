@@ -9,7 +9,7 @@ class Hangman {
 
   pickWord() {
     let randomIndex = Math.floor(Math.random()*this.words.length)
-    let randomWord = this.words[randomIndex]
+    let randomWord = this.words[randomIndex].toUpperCase()
     return randomWord
   }
 
@@ -18,26 +18,28 @@ class Hangman {
     return false
   }
 
-  checkClickedLetters(letter) {
-    for (let i=0; i<this.letters.length; i++) {
-      if (letter === this.letters[i]) {
-        return false
-      }
-    }
+  checkClickedLetters(letter) { //is the letter new?
+    if (this.letters.includes(letter)) return false
     return true
   }
 
   addCorrectLetter(letter) {
-    this.guessedLetters += letter
-    if (this.pickWord.length === this.guessedLetters.length) {
-      console.log('user won')
+    for (let i=0; i<this.secretWord.length; i++) {
+      if (letter === this.secretWord[i]){
+        this.guessedLetters += letter
+        this.letters.push(letter)
+        console.log(`${letter} has been added to guessed letters ${this.guessedLetters}`)
+      }
     }
   }
 
   addWrongLetter(letter) {
-    this.errorsLeft -= 1
-    if (!this.letters.includes(letter)) {
-      this.letters.push(letter)
+    if (!this.secretWord.includes(letter)) {
+      this.errorsLeft -= 1
+      if (!this.letters.includes(letter)) {
+        this.letters.push(letter)
+        console.log(`${letter} has been added to letters ${this.letters}`)
+      }
     }
   }
 
@@ -63,14 +65,34 @@ if (startGameButton) {
     hangman = new Hangman(['node', 'javascript', 'react', 'miami', 'paris', 'amsterdam', 'lisboa']);
 
     // HINT (uncomment when start working on the canvas portion of the lab)
-    // hangman.secretWord = hangman.pickWord();
-    // hangmanCanvas = new HangmanCanvas(hangman.secretWord);
+    hangman.secretWord = hangman.pickWord();
+    hangmanCanvas = new HangmanCanvas(hangman.secretWord);
 
-    // ... your code goes here
+    hangmanCanvas.createBoard()
+    hangmanCanvas.drawLines()
   });
 }
 
 document.addEventListener('keydown', event => {
   // React to user pressing a key
-  // ... your code goes here
+  let key = String.fromCharCode(event.keyCode)
+  //console.log(key)
+  if (hangman.checkIfLetter) {
+    console.log(`${key} is a letter`)
+    if (hangman.checkClickedLetters(key)) {
+      console.log(`${key} hasn't been pressed before`)
+      hangman.addCorrectLetter(key)
+      hangman.addWrongLetter(key)
+      hangmanCanvas.drawHangman(hangman.errorsLeft)
+    }
+    else {
+      console.log(`${key} was already pressed`)
+    }
+    
+    
+
+  }
+
+  
+
 });
