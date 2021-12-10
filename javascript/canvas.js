@@ -6,11 +6,7 @@ class HangmanCanvas {
   }
 
   createBoard() {
-    //this.context.clearRect(0, 0, canvas.width, canvas.height)
-    this.context.fillStyle = "honeydew"
-    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
-    // this.context.fillStyle = "red"
-    //this.context.fillRect(100, 100, 200, 200)
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
   drawLines() {
@@ -33,13 +29,61 @@ class HangmanCanvas {
   }
 
   writeCorrectLetter(index) {
-    
-    
+    this.context.font = "40px Arial"
+    this.context.textAlign = "center"
+    this.context.textBaseline = "bottom"
+    this.context.strokeStyle = "black"
+    this.context.lineWidth = 2
+
+    let space = 70
+    let x = 375
+    let y = 730
+
+    for (let i=0; i<this.secretWord.length; i++){
+      if (index === this.secretWord[i]) {
+        this.context.fillText(index, x+(i*space), y)
+      }
+    }
   }
 
   writeWrongLetter(letter, errorsLeft) {
-    //fillText(text,x,y)
-    this.context
+    this.context.font = "25px Arial"
+    this.context.textAlign = "end"
+    this.context.textBaseline = "bottom"
+    this.context.strokeStyle = "black"
+    this.context.lineWidth = 2
+    switch(errorsLeft) {
+      case 9:
+        this.context.fillText(letter, 800, 150)
+        break;
+      case 8:
+        this.context.fillText(letter, 830, 150)
+        break;
+      case 7:
+        this.context.fillText(letter, 860, 150)
+        break;
+      case 6:
+        this.context.fillText(letter, 890, 150)
+        break;
+      case 5:
+        this.context.fillText(letter, 920, 150)
+        break;
+      case 4:
+        this.context.fillText(letter, 950, 150)
+        break;
+      case 3:
+        this.context.fillText(letter, 980, 150)
+        break;
+      case 2:
+        this.context.fillText(letter, 1010, 150)
+        break;
+      case 1:
+        this.context.fillText(letter, 1040, 150)
+        break;
+      case 0:
+        this.context.fillText(letter, 1070, 150)
+    }
+
   }
 
   drawHangman(errorsLeft) {
@@ -103,10 +147,16 @@ class HangmanCanvas {
   }
 
   gameOver() {
-    // ... your code goes here
+    this.context.clearRect(150, 150, 800, 500)
+    const img = new Image()
+    img.src = "../../lab-canvas-hangman/images/gameover.png"
+    this.context.drawImage(img, 150, 150)
   }
 
   winner() {
-    // ... your code goes here
+    //this.context.clearRect(150, 150, 800, 500)
+    const img = new Image()
+    img.src = "../../lab-canvas-hangman/images/awesome.png"
+    this.context.drawImage(img, 150, 80)
   }
 }

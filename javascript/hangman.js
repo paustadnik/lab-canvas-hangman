@@ -27,7 +27,6 @@ class Hangman {
     for (let i=0; i<this.secretWord.length; i++) {
       if (letter === this.secretWord[i]){
         this.guessedLetters += letter
-        this.letters.push(letter)
         console.log(`${letter} has been added to guessed letters ${this.guessedLetters}`)
       }
     }
@@ -36,7 +35,7 @@ class Hangman {
   addWrongLetter(letter) {
     if (!this.secretWord.includes(letter)) {
       this.errorsLeft -= 1
-      if (!this.letters.includes(letter)) {
+      if (!this.letters.includes(letter) && !this.guessedLetters.includes(letter)) {
         this.letters.push(letter)
         console.log(`${letter} has been added to letters ${this.letters}`)
       }
@@ -74,25 +73,32 @@ if (startGameButton) {
 }
 
 document.addEventListener('keydown', event => {
-  // React to user pressing a key
   let key = String.fromCharCode(event.keyCode)
-  //console.log(key)
+  
+  
+
   if (hangman.checkIfLetter) {
     console.log(`${key} is a letter`)
     if (hangman.checkClickedLetters(key)) {
       console.log(`${key} hasn't been pressed before`)
       hangman.addCorrectLetter(key)
+      // if (hangman.checkWinner()) {
+      //   hangmanCanvas.winner()
+      // }
+      hangmanCanvas.writeCorrectLetter(key)
       hangman.addWrongLetter(key)
       hangmanCanvas.drawHangman(hangman.errorsLeft)
+      // if (hangman.checkGameOver()) {
+      //   hangmanCanvas.gameOver()
+      // }
+      if (!hangman.guessedLetters.includes(key)) {
+        hangmanCanvas.writeWrongLetter(key, hangman.errorsLeft)
+      }
+      
     }
     else {
       console.log(`${key} was already pressed`)
     }
     
-    
-
   }
-
-  
-
 });
